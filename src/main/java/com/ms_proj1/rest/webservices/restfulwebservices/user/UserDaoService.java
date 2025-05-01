@@ -43,5 +43,10 @@ public class UserDaoService {
 //        we can use         return this.userList.stream().filter(predicate).findFirst().orElse(null)
 //        now this will return 200 code but an empty page which is not right as well
     }
+
+    public void deleteUserById(int id) {
+        Predicate<? super User> predicate = User -> User.getId().equals(id);
+        userList.removeIf(predicate);
+    }
     
 }

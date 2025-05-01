@@ -1,6 +1,7 @@
 package com.ms_proj1.rest.webservices.restfulwebservices.user;
 
 import com.ms_proj1.rest.webservices.restfulwebservices.customException.UserNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,6 +16,11 @@ public class UserResource {
 
     UserResource(UserDaoService userDaoService) {
         this.userDaoService = userDaoService;
+    }
+
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable int id) {
+        userDaoService.deleteUserById(id);
     }
 
 //    will be avialbe at url http://localhost:8080/users
@@ -32,8 +38,9 @@ public class UserResource {
         return user;
     }
 
+    /*here @Valid helps to validate the user properties based on the constraits that has been set*/
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User savedUser = userDaoService.save(user);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedUser.getId()).toUri();
