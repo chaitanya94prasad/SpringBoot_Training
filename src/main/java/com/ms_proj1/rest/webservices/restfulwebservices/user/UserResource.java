@@ -2,6 +2,8 @@ package com.ms_proj1.rest.webservices.restfulwebservices.user;
 
 import com.ms_proj1.rest.webservices.restfulwebservices.customException.UserNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -36,6 +38,23 @@ public class UserResource {
             throw new UserNotFoundException("id:"+id);
         }
         return user;
+    }
+
+//    here we are using HAL and give a link in the result
+    @GetMapping("/users/entityModel/{id}")
+    public EntityModel<User> retrieveUserEntityModel(@PathVariable int id) {
+        User user = userDaoService.findOne(id);
+        if(null == user) {
+            throw new UserNotFoundException("id:"+id);
+        }
+
+//        here we are creating an entity model object inorder to add the HAL values
+//        we have added the link to a specific function. basically the url that can be sent as new response
+//                in our case it is url for retrieving all the users
+        EntityModel<User> entityModel = EntityModel.of(user);
+        WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).retrieveAllUsers());
+        entityModel.add(link.withRel("all-users"));
+        return entityModel;
     }
 
     /*here @Valid helps to validate the user properties based on the constraits that has been set*/
