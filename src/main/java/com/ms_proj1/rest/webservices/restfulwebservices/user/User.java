@@ -3,22 +3,32 @@ package com.ms_proj1.rest.webservices.restfulwebservices.user;
 /*these imports help in setting constraints on properties of class*/
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
+@Entity(name = "user_details")
+@Table(name = "user_details")
 public class User {
+
+    @Id
+    @GeneratedValue
     private Integer id;
 
     /*these messages are used to send as the error message if it does not validate*/
     @Size(min = 2, message = "Name should have at least 2 characters")
 //    @JsonProperty("user_name") is used here so that in output instead of giving name: it will give user_name:
     @JsonProperty("user_name")
+    @Column(name = "user_name")
     private String name;
 
     @Past(message = "Birth date should be in the past")
     private LocalDate birthDate;
+
+    public User() {
+    }
 
     public User(Integer id, String name, LocalDate birthDate) {
         this.id = id;
