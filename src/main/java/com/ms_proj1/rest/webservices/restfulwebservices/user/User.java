@@ -2,12 +2,14 @@ package com.ms_proj1.rest.webservices.restfulwebservices.user;
 
 /*these imports help in setting constraints on properties of class*/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity(name = "user_details")
 @Table(name = "user_details")
@@ -26,6 +28,20 @@ public class User {
 
     @Past(message = "Birth date should be in the past")
     private LocalDate birthDate;
+
+//    here the mappedBy is the variable name that is being mapped with from the Post class
+//    JsonIgnore is added so that it is not shown in the output
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Post> postList;
+
+    public List<Post> getPostList() {
+        return postList;
+    }
+
+    public void setPostList(List<Post> postList) {
+        this.postList = postList;
+    }
 
     public User() {
     }

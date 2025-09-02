@@ -11,11 +11,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+//this is a restcontroller so an object is created during runtime
+//all the mappings are registered in RequestMappingHandlerMapping
 @RestController
 public class UserResource {
 
     private UserDaoService userDaoService;
 
+//    UserDaoService class is a component so during runtime an object of it is created and used here
     UserResource(UserDaoService userDaoService) {
         this.userDaoService = userDaoService;
     }
